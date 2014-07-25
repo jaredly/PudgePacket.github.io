@@ -1,0 +1,12 @@
+# Site settings
+title: Return this
+email: pudgepacket@gmail.com
+description: ""
+baseurl: ""
+url: "http://pudgepacket.github.io/"
+twitter_username: PudgePacket
+github_username:  PudgePacket
+
+# Build settings
+markdown: kramdown
+permalink: pretty
