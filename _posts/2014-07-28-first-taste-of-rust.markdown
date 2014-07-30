@@ -97,7 +97,7 @@ Since String is a wrapper class around the data we need to get a slice of it, `.
 let first_letter = line.as_slice().chars().next();
 {% endhighlight %}
 
-`first_letter` is now an [Option](http://doc.rust-lang.org/std/option/)\<char\> that might contain a character. Rusts pattern matching lets us check for the existence of the character as well as which character it is at the same time. What we're left with is:
+`first_letter` is now an [Option](http://doc.rust-lang.org/std/option/)\<char\> that might contain a character. From a C++ perspective we can think of Option as an enum that holds different types instead of different values. Option can be Some\<char\> or None. In this instance we're pattern matching against type as well as value, the type of Some\<char\> or None as well as the individual char value. What we're left with is:
 
 {% highlight rust %}
 match first_letter {
