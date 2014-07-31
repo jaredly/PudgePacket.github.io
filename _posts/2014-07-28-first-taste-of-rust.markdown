@@ -112,7 +112,9 @@ match first_letter {
 
 We check for the existence of a letter from a subset of the known OBJ types and let stdout know we've found something. For the catch-all we return `()` which is essentially the equivalent of null. The catch for unknown characters `Some(x)` uses destructuring, bringing x into the scope of it's expression so that we can print the unknown value.
 
-And that's pretty much it!
+I'm going to be continuing this project as well as getting my hands dirty with Rust so check back in a few weeks.
+
+And that's pretty much it! 
 
 [A github link to the code is here](https://github.com/PudgePacket/Rusticle/tree/f851941d3853d08391fa6193af7e8db540367f71)
 
