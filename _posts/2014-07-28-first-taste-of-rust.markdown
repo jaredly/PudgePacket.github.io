@@ -5,7 +5,7 @@ date:   2014-07-28 22:40
 categories: rust
 ---
 
-<i>This post serves as a basic introduction to Rust by creating the first steps of a [Wavefront .obj](http://en.wikipedia.org/wiki/Wavefront_.obj_file) parser. More will be added to the parser in subsequent posts. It will also be a comparisson between Rust and current major langauges.</i>
+<i>This post serves as a basic introduction to Rust by creating the first steps of a [Wavefront .obj](http://en.wikipedia.org/wiki/Wavefront_.obj_file) parser. More will be added to the parser in subsequent posts. It will also be a comparison between Rust and current major langauges.</i>
 
 Recently I've been writing a lot of game logic in C# and even though an outstanding language in its own right it has left me yearning for something closer to the metal. I experimented with Go by writing a [small webserver](https://github.com/PudgePacket/GoAppengineTesting) that runs on a [Google Appengine](https://cloud.google.com/products/app-engine/) instance with an Android app frontend but found that while many features of the language resonated with me, it didn't fill any particular needs and the target domain was not something I worked with often.
 
