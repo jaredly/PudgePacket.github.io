@@ -7,6 +7,15 @@ permalink: /about/
 Blog :: Text <br>
 Blog = "https://pudgepacket.github.io"
 
+Blogger :: Text <br>
+Blogger = "Trent Billington"
+
+Email :: Text <br>
+Email :: "pudgepacket@gmail.com"
+
+Occupation :: Text <br>
+Occupation :: "Game Developer"
+
 <script>
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
