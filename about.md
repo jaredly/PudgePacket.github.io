@@ -11,10 +11,10 @@ Blogger :: Text <br>
 Blogger = "Trent Billington"
 
 Email :: Text <br>
-Email :: "pudgepacket@gmail.com"
+Email = "pudgepacket@gmail.com"
 
 Occupation :: Text <br>
-Occupation :: "Game Developer"
+Occupation = "Game Developer"
 
 <script>
 
