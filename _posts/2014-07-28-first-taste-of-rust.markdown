@@ -5,7 +5,7 @@ date:   2014-07-28 22:40
 categories: rust
 ---
 
-<i>This post serves as a basic introduction to some core concepts in Rust that I discovered on my path to make a [Wavefront .obj](http://en.wikipedia.org/wiki/Wavefront_.obj_file) parser. It will expand on the differences between languages I have used previously and Rust.</i>
+<i>This post serves as a basic introduction to Rust by creating the first steps of a [Wavefront .obj](http://en.wikipedia.org/wiki/Wavefront_.obj_file) parser. More will be added to the parser in subsequent posts. It will also be a comparisson between Rust and current major langauges.</i>
 
 Recently I've been writing a lot of game logic in C# and even though an outstanding language in its own right it has left me yearning for something closer to the metal. I experimented with Go by writing a [small webserver](https://github.com/PudgePacket/GoAppengineTesting) that runs on a [Google Appengine](https://cloud.google.com/products/app-engine/) instance with an Android app frontend but found that while many features of the language resonated with me, it didn't fill any particular needs and the target domain was not something I worked with often.
 
@@ -58,15 +58,15 @@ Coming from C++ this section of code was quite straight forward, set up a path t
 Next up I wanted to see the pattern matching in action. I've been working with lots of 3D models lately and I wanted to emulate a little parser. I used the [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format because it is text based and quite wide spread. The format is defined that the first character of each line determines the type of what follows, quite a typical idea and one that lends itself well to pattern matching.
 
 {% highlight rust %}
-match first_letter {
+match first_character {
     '#' => println!("Comment"),
     'v' => println!("Vertex"),
     'f' => println!("Face"),
-    _   => println!("Unidentified {}", first_letter);
+    _   => println!("Unidentified {}", first_character);
 }
 {% endhighlight %}
 
-The behaviour is very straight forward, match `first_letter` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Currently it looks like a regular switch statement but I'll get to that soon. Matching on `_` is the catch-all, usually referred to as the default. Unlike C++ the match must cover all possible values of the type it's matching on. This is because match is an <i>expression</i> not a <i>statement</i> and must be able to return something.
+The behaviour is very straight forward, match `first_character` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Currently it looks like a regular switch statement but I'll get to that soon. Matching on `_` is the catch-all, usually referred to as the default. Unlike C++ the match must cover all possible patterns of the type it's matching on. This is because match is an <i>expression</i> not a <i>statement</i> and must be able to return something.
 
 Being an expression means we can do things like this
 
@@ -82,7 +82,7 @@ fn phonetic_table_expander(letter: char) -> &'static str {
 }
 {% endhighlight %}
 
-Coming from C++ there are a few things that look like they're missing, namely any kind of return statement. This is because Rust returns by having the block produce an expression, and match returns the expression that was matched. `return` still exists but it is used for returning early from loops and the like.
+For a C style language there are a few things that look like they're missing, namely any kind of return statement. This is because Rust returns by having the block produce an expression, and match returns the expression that was matched. `return` still exists but it is used for returning early from loops and the like.
 
 Next we have to combine the two concepts to get our parser going, matching on the lines from the file. We already know the first letter of each line is what we need to parse so what's left is to make a function that takes a line of text and tells us what type of line it is.
 
@@ -94,13 +94,13 @@ fn parse_line(line: &String) {}
 Since String is a wrapper class around the data we need to get a slice of it, `.as_slice()`. Slices are more or less equivalent to an array of characters. Next we need to get an iterator to grab any of the characters, `.chars()`. Finally we'll call next on the iterator to grab what will be the first character off of the iterator, `.next()`. All up this leaves us with our potential first character.
 
 {% highlight rust %}
-let first_letter = line.as_slice().chars().next();
+let first_character = line.as_slice().chars().next();
 {% endhighlight %}
 
-`first_letter` is now an [Option](http://doc.rust-lang.org/std/option/)\<char\> that might contain a character. From a C++ perspective we can think of Option as an enum that holds different types instead of different values. Option can be Some\<char\> or None. In this instance we're pattern matching against type as well as value, the type of Some\<char\> or None as well as the individual char value. What we're left with is:
+`first_character` is now an [Option](http://doc.rust-lang.org/std/option/)\<char\> that might contain a character. From a C++ perspective we can think of Option as an enum that holds different types instead of different values. Option can be Some\<char\> or None. In this instance we're pattern matching against type as well as value, the type of Some\<char\> or None as well as the individual char value. What we're left with is:
 
 {% highlight rust %}
-match first_letter {
+match first_character {
     Some('#') => println!("Comment"),
     Some('v') => println!("Vertex"),
     Some('s') => println!("Shading"),
@@ -112,19 +112,21 @@ match first_letter {
 
 We check for the existence of a letter from a subset of the known OBJ types and let stdout know we've found something. For the catch-all we return `()` which is essentially the equivalent of null. The catch for unknown characters `Some(x)` uses destructuring, bringing x into the scope of it's expression so that we can print the unknown value.
 
-I'm going to be continuing this project as well as getting my hands dirty with Rust so check back in a few weeks.
+I'll be continuing my exploration of rust by getting my hands dirty with this parser so check back soon for the next part.
 
-And that's pretty much it! 
+And that's pretty much it!
 
-[A github link to the code is here](https://github.com/PudgePacket/Rusticle/tree/f851941d3853d08391fa6193af7e8db540367f71)
+[A github link to the code is here, feel free to fork if you like.](https://github.com/PudgePacket/Rusticle/tree/5081a02ca41f75da99daa25ae0927b55cc13605f)
+
+Full source code:
 
 {% highlight rust %}
 use std::io::File;
 use std::io::BufferedReader;
 
 fn parse_line(line: &String) {
-    let first_letter = line.as_slice().chars().next();
-    match first_letter {
+    let first_character = line.as_slice().chars().next();
+    match first_character {
         Some('#') => println!("Comment"),
         Some('v') => println!("Vertex"),
         Some('s') => println!("Shading"),
