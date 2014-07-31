@@ -46,14 +46,13 @@ use std::io::BufferedReader;
 fn main() {
     let path = Path::new("message.txt");
     let mut file = BufferedReader::new(File::open(&path));
-    let lines: Vec<String> = file.lines().map(|x| x.unwrap()).collect();
-    for line in lines.iter() {
-        println!("{}",line);
+    for line in file.lines().map(|x| x.unwrap()) {
+        parse_line(line.as_slice());
     }
 }
 {% endhighlight %}
 
-Coming from C++ this section of code was quite straight forward, set up a path to the file, open the file using a buffered reader and read it line by line into a vector. Perhaps the only unusual looking part is the [lamba syntax](http://doc.rust-lang.org/rust.html#lambda-expressions) inside of map `|x| x.unwrap()` though even that is not difficult to translate into `|arguments| expression`.
+Coming from C++ this section of code was quite straight forward, set up a path to the file, open the file using a buffered reader and read it line by line into a vector. Perhaps the only unusual looking part is the [lamba syntax](http://doc.rust-lang.org/rust.html#lambda-expressions) inside of map `|x| x.unwrap()` though even that is not difficult to translate into `|arguments| expression`. Also, since String is a wrapper class around &str (the actual data) so we need to get a slice of it, `.as_slice()`.
 
 Next up I wanted to see the pattern matching in action. I've been working with lots of 3D models lately and I wanted to emulate a little parser. I used the [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format because it is text based and quite wide spread. The format is defined that the first character of each line determines the type of what follows, quite a typical idea and one that lends itself well to pattern matching.
 
@@ -68,7 +67,7 @@ match first_character {
 
 The behaviour is very straight forward, match `first_character` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Pattern matching in Rust must be exhaustive. This can be achieved by creating patterns to satisfy every possibility. This process is made easier with a wildcard like `_` to catch all value, similar to default in other langauges.
 
-Being an expression means we can do things like this
+Match being an expression rather than a statement means we can do things like this
 
 {% highlight rust %}
 fn phonetic_table_expander(letter: char) -> &'static str {
@@ -82,19 +81,19 @@ fn phonetic_table_expander(letter: char) -> &'static str {
 }
 {% endhighlight %}
 
-For a 'C style' language there are a few things that look like they're missing, namely any kind of return statement. This is because Rust returns by having the block produce an expression, and match returns the expression that was matched. `return` still exists but it is used for returning early from loops and the like.
+For a 'C style' language there are a few things that look like they're missing, namely any kind of return statement. This is because Rusts return is implicit. Match works the same way, returning the matching expression. `return` still exists as a keyword but it is used for returning early from loops and the like.
 
 Next we have to combine the two concepts to get our parser going, matching on the lines from the file. We already know the first letter of each line is what we need to parse so what's left is to make a function that takes a line of text and tells us what type of line it is.
 
 
 {% highlight rust %}
-fn parse_line(line: &String) {}
+fn parse_line(line: &str) {}
 {% endhighlight %}
 
-Since String is a wrapper class around the data we need to get a slice of it, `.as_slice()`. Slices are more or less equivalent to an array of characters. Next we need to get an iterator to grab any of the characters, `.chars()`. Finally we'll call next on the iterator to grab what will be the first character off of the iterator, `.next()`. All up this leaves us with our potential first character.
+We need to get an iterator to grab any of the characters, an iterator is made by calling `.chars()`. Finally we'll call next on the iterator to grab what will be the first character off of the iterator, `.next()`. All up this leaves us with our potential first character.
 
 {% highlight rust %}
-let first_character = line.as_slice().chars().next();
+let first_character = line.chars().next();
 {% endhighlight %}
 
 `first_character` is now an [Option](http://doc.rust-lang.org/std/option/)\<char\> that might contain a character. From a C++ perspective we can think of Option as an enum that holds different types instead of different values. Option can be Some\<char\> or None. In this instance we're pattern matching against type as well as value, the type of Some\<char\> or None as well as the individual char value. What we're left with is:
@@ -124,8 +123,8 @@ Full source code:
 use std::io::File;
 use std::io::BufferedReader;
 
-fn parse_line(line: &String) {
-    let first_character = line.as_slice().chars().next();
+fn parse_line(line: &str) {
+    let first_character = line.chars().next();
     match first_character {
         Some('#') => println!("Comment"),
         Some('v') => println!("Vertex"),
@@ -139,9 +138,8 @@ fn parse_line(line: &String) {
 fn main() {
     let path = Path::new("cube.obj");
     let mut file = BufferedReader::new(File::open(&path));
-    let lines: Vec<String> = file.lines().map(|x|x.unwrap()).collect();
-    for line in lines.iter() {
-        parse_line(line);
+    for line in file.lines().map(|x| x.unwrap()) {
+        parse_line(line.as_slice());
     }
 }
 {% endhighlight %}
