@@ -9,7 +9,7 @@ categories: rust
 
 Recently I've been writing a lot of game logic in C# and even though an outstanding language in its own right it has left me yearning for something closer to the metal. I experimented with Go by writing a [small webserver](https://github.com/PudgePacket/GoAppengineTesting) that runs on a [Google Appengine](https://cloud.google.com/products/app-engine/) instance with an Android app frontend but found that while many features of the language resonated with me, it didn't fill any particular needs and the target domain was not something I worked with often.
 
-I'd seen [Rust](http://www.rust-lang.org/) mentioned on [HN](https://news.ycombinator.com) and was curious if it was possible to incorporate elements from Haskell, C++, and Lisp into the same language elegantly. I was pleasantly surprised by the combination of [pure functions](https://en.wikipedia.org/wiki/Pure_function), [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and [pattern matching](https://en.wikipedia.org/wiki/Pattern_matching) with [deterministic resource management](https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization), zero cost abstractions, and C style syntax.
+I'd seen [Rust](http://www.rust-lang.org/) mentioned on [HN](https://news.ycombinator.com) and was curious if it was possible to incorporate elements from Haskell, C++, and Lisp into the same language elegantly. I was pleasantly surprised by the combination of [pure functions](https://en.wikipedia.org/wiki/Pure_function), [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type), and [pattern matching](https://en.wikipedia.org/wiki/Pattern_matching) with [deterministic resource management](https://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization), zero cost abstractions, and 'C style' syntax.
 
 I decided to give it a shot. After a few small hiccups getting it running on windows and finding the [Sublime](https://www.sublimetext.com/) plugin I dove straight in.
 
@@ -27,10 +27,10 @@ fn main() {
 }
 {% endhighlight %}
 
-I enjoy writing functional code when I can but it's not always possible in my line of work. Rusts immutability by default with `let` felt like a sound design decision however the ability to use mutable variables without hassle was the clincher here.
+I enjoy writing functional code when I can but it's not always possible in my line of work. Rusts 'immutability by default' with `let` felt like a sound design decision however the ability to use mutable variables without hassle was the clincher here.
 
 {% highlight rust %}
-let     x = 50i; // Immutable
+let x = 50i; // Immutable
 let mut y = 50i; // Mutable
 
 x = 100i; // Error
@@ -66,7 +66,7 @@ match first_character {
 }
 {% endhighlight %}
 
-The behaviour is very straight forward, match `first_character` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Currently it looks like a regular switch statement but I'll get to that soon. Matching on `_` is the catch-all, usually referred to as the default. Unlike C++ the match must cover all possible patterns of the type it's matching on. This is because match is an <i>expression</i> not a <i>statement</i> and must be able to return something.
+The behaviour is very straight forward, match `first_character` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Pattern matching in Rust must be exhaustive. This can be achieved by creating patterns to satisfy every possibility. This process is made easier with a wildcard like `_` to catch all value, similar to default in other langauges.
 
 Being an expression means we can do things like this
 
@@ -82,7 +82,7 @@ fn phonetic_table_expander(letter: char) -> &'static str {
 }
 {% endhighlight %}
 
-For a C style language there are a few things that look like they're missing, namely any kind of return statement. This is because Rust returns by having the block produce an expression, and match returns the expression that was matched. `return` still exists but it is used for returning early from loops and the like.
+For a 'C style' language there are a few things that look like they're missing, namely any kind of return statement. This is because Rust returns by having the block produce an expression, and match returns the expression that was matched. `return` still exists but it is used for returning early from loops and the like.
 
 Next we have to combine the two concepts to get our parser going, matching on the lines from the file. We already know the first letter of each line is what we need to parse so what's left is to make a function that takes a line of text and tells us what type of line it is.
 
