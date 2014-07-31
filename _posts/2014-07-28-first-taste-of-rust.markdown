@@ -52,7 +52,7 @@ fn main() {
 }
 {% endhighlight %}
 
-Coming from C++ this section of code was quite straight forward, set up a path to the file, open the file using a buffered reader and read it line by line into a vector. Perhaps the only unusual looking part is the [lamba syntax](http://doc.rust-lang.org/rust.html#lambda-expressions) inside of map `|x| x.unwrap()` though even that is not difficult to translate into `|arguments| expression`. Also, since String is a wrapper class around a &str (a reference to the actual data) we need to get a slice (a &str reference) of it, `.as_slice()`.
+Coming from C++ this section of code was quite straight forward, set up a path to the file, open the file using a buffered reader and read it line by line into a vector. Perhaps the only unusual looking part is the [lamba syntax](http://doc.rust-lang.org/rust.html#lambda-expressions) inside of map `|x| x.unwrap()` though even that is not difficult to translate into `|arguments| expression`. Also, since String is not something we can modify directly we have to get it in a workable type in the form of &str using `.as_slice()`.
 
 Next up I wanted to see the pattern matching in action. I've been working with lots of 3D models lately and I wanted to emulate a little parser. I used the [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format because it is text based and quite wide spread. The format is defined that the first character of each line determines the type of what follows, quite a typical idea and one that lends itself well to pattern matching.
 
