@@ -58,15 +58,15 @@ Coming from C++ this section of code was quite straight forward, set up a path t
 Next up I wanted to see the pattern matching in action. I've been working with lots of 3D models lately and I wanted to emulate a little parser. I used the [OBJ](http://en.wikipedia.org/wiki/Wavefront_.obj_file) format because it is text based and quite wide spread. The format is defined that the first character of each line determines the type of what follows, quite a typical idea and one that lends itself well to pattern matching.
 
 {% highlight rust %}
-match char_value {
+match first_letter {
     '#' => println!("Comment"),
     'v' => println!("Vertex"),
     'f' => println!("Face"),
-    _   => println!("Unidentified {}", char_value);
+    _   => println!("Unidentified {}", first_letter);
 }
 {% endhighlight %}
 
-The behaviour is very straight forward, match `char_value` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Currently it looks like a regular switch statement but I'll get to that soon. Matching on `_` is the catch-all, usually referred to as the default. Unlike C++ the match must cover all possible values of the type it's matching on. This is because match is an <i>expression</i> not a <i>statement</i> and must be able to return something.
+The behaviour is very straight forward, match `first_letter` on the pattern (Left side) and if the match succeeds evaluate the expression (Right side). Currently it looks like a regular switch statement but I'll get to that soon. Matching on `_` is the catch-all, usually referred to as the default. Unlike C++ the match must cover all possible values of the type it's matching on. This is because match is an <i>expression</i> not a <i>statement</i> and must be able to return something.
 
 Being an expression means we can do things like this
 
