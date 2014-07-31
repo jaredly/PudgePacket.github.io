@@ -123,23 +123,23 @@ use std::io::File;
 use std::io::BufferedReader;
 
 fn parse_line(line: &String) {
-	let first_letter = line.as_slice().chars().next();
-	match first_letter {
-		Some('#') => println!("Comment"),
-		Some('v') => println!("Vertex"),
-		Some('s') => println!("Shading"),
-		Some('f') => println!("Face"),
-		Some(x)   => println!("Unknown {}" , x),
-		None      => ()
-	}
+    let first_letter = line.as_slice().chars().next();
+    match first_letter {
+        Some('#') => println!("Comment"),
+        Some('v') => println!("Vertex"),
+        Some('s') => println!("Shading"),
+        Some('f') => println!("Face"),
+        Some(x)   => println!("Unknown {}" , x),
+        None      => ()
+    }
 }
 
 fn main() {
-	let path = Path::new("cube.obj");
-	let mut file = BufferedReader::new(File::open(&path));
-	let lines: Vec<String> = file.lines().map(|x|x.unwrap()).collect();
-	for line in lines.iter() {
-		parse_line(line);
-	}
+    let path = Path::new("cube.obj");
+    let mut file = BufferedReader::new(File::open(&path));
+    let lines: Vec<String> = file.lines().map(|x|x.unwrap()).collect();
+    for line in lines.iter() {
+        parse_line(line);
+    }
 }
 {% endhighlight %}
